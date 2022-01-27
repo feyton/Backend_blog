@@ -30,7 +30,9 @@ mongoose.connect(dbURI, {useNewUrlParser: true, useUnifiedTopology: true})
 .then((result) => console.log(`connected to db`))
 .catch((err) => console.log(err));
 
-
+app.get(`/`, (req, res) =>{
+    res.send(`WELCOME!`);
+})
 
 const swaggerOptions ={
     swaggerDefinition: {
