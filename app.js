@@ -23,9 +23,8 @@ app.use(cors())
 
 
 
-
 // connect to database
-const dbURI= `mongodb+srv://fides:fides123@mybrand.zytgh.mongodb.net/Mybrand?retryWrites=true&w=majority`;
+const dbURI= process.env.MONGODB_URI ||`mongodb+srv://fides:fides123@mybrand.zytgh.mongodb.net/Mybrand?retryWrites=true&w=majority`;
 mongoose.connect(dbURI, {useNewUrlParser: true, useUnifiedTopology: true})
 .then((result) => console.log(`connected to db`))
 .catch((err) => console.log(err));
