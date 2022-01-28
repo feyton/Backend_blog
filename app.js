@@ -7,19 +7,18 @@ const articleRoute = require(`./routes/article`);
 const userRoute = require(`./routes/user`);
 const cookieParser = require(`cookie-parser`);
 const cors = require(`cors`);
+const dotenv = require("dotenv")
+dotenv.config()
 
 const app = express();
-
+app.use(cors())
 const swaggerJsDoc = require(`swagger-jsdoc`);
 const swaggerUi = require(`swagger-ui-express`);
-
-
-require("dotenv").config();
 
 app.use(express.json());
 app.use(express.static(`public`));
 app.use(cookieParser());
-app.use(cors())
+
 
 
 
