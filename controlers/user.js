@@ -104,13 +104,14 @@ const userloginController = async (req, res) => {
 
   // password is correct
   const validPass = await bcrypt.compare(req.body.password, user.password);
-  if (!validPass) return res.status(400).send(`Invalid Password`);
+  if (!validPass)
+    return res.status(400).json({ message: "Invalid credentilas" });
 
   //  create and assign token
-  const token = jwt.sign({ _id: user._id }, process.env.TOKEN_SECRET);
-  res.header(`auth_token`, token).send(token);
-
-  res.send(`Logged In`);
+  const token = jwt.sign({ _id: user._id }, process.env.TOKEN_SECRET, {
+    expiresIn: "1h",
+  });
+  res.status(200).json({ token });
 };
 
 module.exports = {

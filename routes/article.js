@@ -1,15 +1,14 @@
-
-    const express = require(`express`);
-    const articleController = require(`../controlers/article`);
-    const verify = require(`../routes/verifyToken`);
-    const router = express.Router();
-    /**
+const express = require(`express`);
+const articleController = require(`../controlers/article`);
+const verify = require(`../routes/verifyToken`);
+const router = express.Router();
+/**
  * @openapi
  * tags:
  *  name: Blog
  */
 
-    /**
+/**
  * @swagger
  * components:
  *  schemas:
@@ -21,7 +20,7 @@
  *      properties:
  *        title:
  *          type: string
- *          description: Every post must have title 
+ *          description: Every post must have title
  *        description:
  *          type: string
  *          description: This holds the content of the post.
@@ -31,13 +30,11 @@
  *        body: This is content of my post
  */
 
+router.post("/", verify, articleController.articleController);
 
-    router.post(`/article`,verify, articleController.articleController);
-   
-    router.get(`/article`,verify, articleController.getArticles);
-    router.get(`/:_id`, verify, articleController.getArticle);
-    router.put(`/:_id`, verify, articleController.updateArticle);
-    router.delete(`/:_id`,verify, articleController.deleteArticle)
-    
-    
-    module.exports = router
+router.get("/", articleController.getArticles);
+router.get("/:id", articleController.getArticle);
+router.put("/:id", verify, articleController.updateArticle);
+router.delete("/:id", verify, articleController.deleteArticle);
+
+module.exports = router;
