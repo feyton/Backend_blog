@@ -1,7 +1,11 @@
 const express = require(`express`);
 const mongoose = require(`mongoose`);
+
 const dotenv = require(`dotenv`);
 const contactRoute = require("./routes/contact");
+
+const contactRoute = require(`./routes/contact`);
+
 const articleRoute = require(`./routes/article`);
 const userRoute = require(`./routes/user`);
 const cookieParser = require(`cookie-parser`);
@@ -19,6 +23,22 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(express.static(`public`));
 app.use(cookieParser());
+=======
+const dotenv = require("dotenv")
+dotenv.config()
+
+const app = express();
+app.use(cors())
+const swaggerJsDoc = require(`swagger-jsdoc`);
+const swaggerUi = require(`swagger-ui-express`);
+
+app.use(express.json());
+app.use(express.static(`public`));
+app.use(cookieParser());
+
+
+
+
 
 // connect to database
 
