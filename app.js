@@ -14,6 +14,7 @@ const PORT = process.env.PORT || 3000;
 
 const swaggerJsDoc = require(`swagger-jsdoc`);
 const swaggerUi = require(`swagger-ui-express`);
+const { errLogger } = require("./middlewares/auth");
 app.use(express.urlencoded({ extended: false }));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.json());
@@ -54,12 +55,14 @@ app.get("/", (req, res) => {
   res.status(200).json({ message: "hello" });
 });
 
-app.use("/*", (req, res) => {
-  res.status(404).json({
+app.use("/*", (req, res, next) => {
+  return res.status(404).json({
     status: `fail`,
     message: `Page Not found`,
   });
 });
+
+app.use(errLogger);
 
 const dbURI = process.env.MONGODB_URI;
 mongoose

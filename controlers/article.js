@@ -2,7 +2,7 @@ const Article = require(`../models/article`);
 const mongoose = require(`mongoose`);
 const { articleValidation } = require(`../middlewares/article`);
 
-const articleController = async (req, res) => {
+const articleController = async (req, res, next) => {
   //  Validate data
   const { error } = articleValidation(req.body);
   if (error) return res.status(400).json(error.details[0].message);
@@ -20,7 +20,7 @@ const articleController = async (req, res) => {
   }
 };
 
-const getArticles = async (req, res) => {
+const getArticles = async (req, res, next) => {
   try {
     const allArticle = await Article.find({});
     res.status(200).json({ message: `All articles`, allArticle });
@@ -28,7 +28,7 @@ const getArticles = async (req, res) => {
     res.status(500).json({ message: err });
   }
 };
-const getArticle = async (req, res) => {
+const getArticle = async (req, res, next) => {
   const { id } = req.params;
   try {
     const article = await Article.findById(id);
@@ -40,7 +40,7 @@ const getArticle = async (req, res) => {
   }
 };
 
-const updateArticle = async (req, res) => {
+const updateArticle = async (req, res, next) => {
   //  Validate data
   const { error } = articleValidation(req.body);
   if (error) return res.status(400).send(error.details[0].message);
@@ -64,19 +64,18 @@ const updateArticle = async (req, res) => {
   }
 };
 
-const deleteArticle = async (req, res) => {
+const deleteArticle = async (req, res, next) => {
   const { id } = req.params;
   if (!mongoose.Types.ObjectId.isValid(id))
     return res.status(400).json({ err: `Invalid id` });
 
-  try {
-    const deletedArticle = await Article.deleteOne({ _id: id });
-    res
-      .status(200)
-      .json({ message: `User Deleted successfully`, deletedArticle });
-  } catch (error) {
-    res.status(500).json({ message: error });
-  }
+  const deletedArticle = await Article.deleteOne({ _id: id });
+  console.log(deletedArticle.deletedCount);
+  if (deletedArticle.deletedCount == 0)
+    return res.status(404).json({ message: "resource not found" });
+  return res
+    .status(200)
+    .json({ message: `Article deleted succesfully`, deletedArticle });
 };
 
 module.exports = {

@@ -2,6 +2,7 @@ const express = require(`express`);
 const articleController = require(`../controlers/article`);
 const verify = require(`../routes/verifyToken`);
 const router = express.Router();
+const {asyncHandler} = require("../middlewares/auth")
 /**
  * @openapi
  * tags:
@@ -30,11 +31,11 @@ const router = express.Router();
  *        body: This is content of my post
  */
 
-router.post("/", verify, articleController.articleController);
+router.post("/", verify, asyncHandler(articleController.articleController));
 
-router.get("/", articleController.getArticles);
-router.get("/:id", articleController.getArticle);
-router.put("/:id", verify, articleController.updateArticle);
-router.delete("/:id", verify, articleController.deleteArticle);
+router.get("/", asyncHandler(articleController.getArticles));
+router.get("/:id",asyncHandler (articleController.getArticle));
+router.put("/:id", verify, asyncHandler(articleController.updateArticle));
+router.delete("/:id", verify, asyncHandler(articleController.deleteArticle));
 
 module.exports = router;
