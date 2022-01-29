@@ -15,6 +15,7 @@ const PORT = process.env.PORT || 3000;
 const swaggerJsDoc = require(`swagger-jsdoc`);
 const swaggerUi = require(`swagger-ui-express`);
 const { errLogger } = require("./middlewares/auth");
+const { accepts } = require("express/lib/request");
 app.use(express.urlencoded({ extended: false }));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.json());
@@ -51,8 +52,21 @@ app.use(`/api-docs`, swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 app.use(`/users`, userRoute);
 app.use(`/articles`, articleRoute);
 app.use(`/contact`, contactRoute);
+
+let template = `
+<body style="display: flex; justify-content: center; align-items: center; flex-direction: column;  font-family: "lexend";
+background: #444;>
+    <h1>Hello there in the browser</h1>
+    <p>Please check our docs page below</p>
+    <a href="/api-docs" style="border: 1px solid green; padding: .4rem 2rem; border-radius: 20px">API DOCS</a>
+</body>
+
+`;
 app.get("/", (req, res) => {
-  res.status(200).json({ message: "hello" });
+  if (req.accepts()[0] == "text/html") {
+    return res.status(200).send(template);
+  }
+  return res.status(200).json({ message: "hello there JSON" });
 });
 
 app.use("/*", (req, res, next) => {
