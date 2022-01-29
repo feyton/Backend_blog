@@ -6,7 +6,7 @@ const { object } = require("joi");
 const { use } = require("chai");
 const { registerValidation, loginValidation } = require(`../middlewares/auth`);
 
-const userController = async (req, res) => {
+const userController = async (req, res, next) => {
   //  Validate data before user
   const { error } = registerValidation(req.body);
   if (error) return res.status(400).send(error.details[0].message);
@@ -25,12 +25,10 @@ const userController = async (req, res) => {
     email: req.body.email,
     password: hashedPassword,
   });
-  try {
-    const savedUser = await user.save();
-    res.status(201).json({ message: `user created`, savedUser });
-  } catch (err) {
-    res.status(400).json({ message: err });
-  }
+
+  const savedUser = await user.save();
+  let { password, ...userInfo } = savedUser._doc;
+  res.status(201).json({ message: `user created`, userInfo });
 };
 
 const getusers = async (req, res) => {

@@ -58,7 +58,5 @@ const errLogger = (error, req, res, next) => {
   return res.status(500).json({ message: "We dont have an idea. excuse us" });
 };
 
-module.exports.registerValidation = registerValidation;
-module.exports.loginValidation = loginValidation;
 
-module.exports = { asyncHandler, errLogger };
+module.exports = { asyncHandler, errLogger, registerValidation, loginValidation };
